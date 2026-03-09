@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>بطاقة تهنئة - زوار الروضة الشريفة</title>
+  <style>
+    :root {
+      --primary: #b86b3d;
+      --accent: #f3d6cf;
+      --text: #6e4a38;
+      --bg: #f8f6f3;
+      --card: #ffffff;
+      --border: #eadfd9;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Tahoma, Arial, sans-serif;
+      background: var(--bg);
+      color: #222;
+    }
+    .wrap {
+      max-width: 1100px;
+      margin: 24px auto;
+      padding: 16px;
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+    .panel, .preview {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: 0 10px 28px rgba(0,0,0,.06);
+    }
+    .panel {
+      padding: 20px;
+      position: sticky;
+      top: 16px;
+    }
+    h1 {
+      font-size: 22px;
+      margin: 0 0 10px;
+      color: var(--primary);
+    }
+    p {
+      margin: 0 0 18px;
+      line-height: 1.8;
+      color: #555;
+    }
+    label {
+      display: block;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+    input {
+      width: 100%;
+      height: 48px;
+      border-radius: 12px;
+      border: 1px solid #d7c5bc;
+      padding: 0 14px;
+      font-size: 18px;
+      outline: none;
+    }
+    input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(184,107,61,.12);
+    }
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+    button {
+      border: 0;
+      border-radius: 12px;
+      padding: 12px 18px;
+      font-size: 16px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+    .btn-secondary {
+      background: #efe7e2;
+      color: var(--text);
+    }
+    .preview {
+      padding: 14px;
+    }
+    .canvas-wrap {
+      width: 100%;
+      overflow: auto;
+      text-align: center;
+    }
+    canvas {
+      max-width: 100%;
+      height: auto;
+      border-radius: 14px;
+      background: white;
+    }
+    .hint {
+      margin-top: 14px;
+      font-size: 14px;
+      color: #666;
+    }
+    @media (max-width: 900px) {
+      .wrap {
+        grid-template-columns: 1fr;
+      }
+      .panel {
+        position: static;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="panel">
+      <h1>بطاقة تهنئة بالاسم</h1>
+      <p>اكتب الاسم ثم اضغط <strong>معاينة</strong> لعرضه داخل البطاقة، وبعدها اضغط <strong>تحميل</strong> لتنزيل الصورة النهائية.</p>
+
+      <label for="nameInput">الاسم</label>
+      <input id="nameInput" type="text" placeholder="اكتب الاسم هنا" />
+
+      <div class="actions">
+        <button class="btn-primary" id="previewBtn">معاينة</button>
+        <button class="btn-secondary" id="downloadBtn">تحميل الصورة</button>
+      </div>
+
+      <div class="hint">
+        تم استخدام نسخة محسّنة الدقة من البطاقة. يمكنك تعديل موضع الاسم أو حجمه بسهولة من داخل الكود عند الحاجة.
+      </div>
+    </div>
+
+    <div class="preview">
+      <div class="canvas-wrap">
+        <canvas id="cardCanvas"></canvas>
+      </div>
+    </div>
+  </div>
+<script>
+  const imageSrc = "eid-card.png";
+  const canvas = document.getElementById('cardCanvas');
+  const ctx = canvas.getContext('2d');
+  const img = new Image();
+  img.src = imageSrc;
+
+  // مكان الاسم داخل المستطيل الوردي بعد التحسين 1800x3200
+  const nameBox = {
+    x: 530,
+    y: 1230,
+    width: 850,
+    height: 135
+  };
+
+  function fitText(ctx, text, maxWidth, startSize, minSize) {
+    let size = startSize;
+    while (size > minSize) {
+      ctx.font = `700 ${size}px Tahoma, Arial, sans-serif`;
+      if (ctx.measureText(text).width <= maxWidth) return size;
+      size -= 2;
+    }
+    return minSize;
+  }
+
+  function drawCard() {
+    const name = (document.getElementById('nameInput').value || '').trim();
+
+    canvas.width = img.width;
+    canvas.height = img.height;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(img, 0, 0);
+
+    if (name) {
+      const maxTextWidth = nameBox.width - 60;
+      const fontSize = fitText(ctx, name, maxTextWidth, 68, 34);
+      ctx.font = `700 ${fontSize}px Tahoma, Arial, sans-serif`;
+      ctx.fillStyle = '#8f5d45';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+
+      ctx.shadowColor = 'rgba(255,255,255,0.35)';
+      ctx.shadowBlur = 2;
+
+      ctx.fillText(
+        name,
+        nameBox.x + nameBox.width / 2,
+        nameBox.y + nameBox.height / 2
+      );
+
+      ctx.shadowBlur = 0;
+    }
+  }
+
+  img.onload = drawCard;
+
+  document.getElementById('previewBtn').addEventListener('click', drawCard);
+
+  document.getElementById('downloadBtn').addEventListener('click', () => {
+    drawCard();
+    const a = document.createElement('a');
+    const safeName = (document.getElementById('nameInput').value || 'بطاقة-تهنئة').trim().replace(/[\\/:*?"<>|]/g, '-');
+    a.href = canvas.toDataURL('image/png');
+    a.download = `${safeName || 'بطاقة-تهنئة'}.png`;
+    a.click();
+  });
+
+  document.getElementById('nameInput').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') drawCard();
+  });
+</script>
+</body>
+</html>
