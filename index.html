@@ -19,6 +19,7 @@
   <link rel="icon" href="eid-card.png">
   
   <title>بطاقة تهنئة - زوار الروضة الشريفة</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;700&display=swap" rel="stylesheet">  
   <style>
     :root {
       --primary: #b86b3d;
@@ -184,7 +185,7 @@ const nameBox = {
   function fitText(ctx, text, maxWidth, startSize, minSize) {
     let size = startSize;
     while (size > minSize) {
-      ctx.font = `700 ${size}px Tahoma, Arial, sans-serif`;
+      ctx.font = `700 ${size}px Tajawal`;
       if (ctx.measureText(text).width <= maxWidth) return size;
       size -= 2;
     }
@@ -202,8 +203,8 @@ const nameBox = {
     if (name) {
       const maxTextWidth = nameBox.width - 60;
       const fontSize = fitText(ctx, name, maxTextWidth, 68, 34);
-      ctx.font = `700 ${fontSize}px Tahoma, Arial, sans-serif`;
-      ctx.fillStyle = '#8f5d45';
+      ctx.font = `700 ${fontSize}px Tajawal`;
+      ctx.fillStyle = '#7a4b33';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
 
@@ -212,15 +213,18 @@ const nameBox = {
 
       ctx.fillText(
         name,
-        nameBox.x + nameBox.width / 2,
+        nameBox.x + nameBox.width / 2 - 30,
         nameBox.y + nameBox.height / 2
       );
 
       ctx.shadowBlur = 0;
     }
   }
-
-  img.onload = drawCard;
+  
+  document.fonts.ready.then(() => {
+    img.onload = drawCard;
+  });
+  
 
   document.getElementById('previewBtn').addEventListener('click', drawCard);
 
