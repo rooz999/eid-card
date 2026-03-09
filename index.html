@@ -184,10 +184,11 @@ const nameBox = {
 
   function fitText(ctx, text, maxWidth, startSize, minSize) {
     let size = startSize;
-    while (size > minSize) {
+    while (size >= minSize) {
       ctx.font = `700 ${size}px Tajawal`;
-      if (ctx.measureText(text).width <= maxWidth) return size;
-      size -= 2;
+      const width = ctx.measureText(text).width;
+      if (width <= maxWidth) return size;
+      size -= 1;
     }
     return minSize;
   }
@@ -201,22 +202,23 @@ const nameBox = {
     ctx.drawImage(img, 0, 0);
 
     if (name) {
-      const maxTextWidth = nameBox.width - 140;
-      const fontSize = fitText(ctx, name, maxTextWidth, 68, 20);
+      const maxTextWidth = nameBox.width - 220;
+      const fontSize = fitText(ctx, name, maxTextWidth, 64, 16);
       ctx.font = `700 ${fontSize}px Tajawal`;
       ctx.fillStyle = '#7a4b33';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-
+      ctx.direction = 'rtl';
+      
       ctx.shadowColor = 'rgba(255,255,255,0.35)';
       ctx.shadowBlur = 2;
-
+      
       ctx.fillText(
         name,
-        nameBox.x + nameBox.width / 2 - 15,
+        nameBox.x + nameBox.width / 2,
         nameBox.y + nameBox.height / 2 + 12
       );
-
+      
       ctx.shadowBlur = 0;
     }
   }
