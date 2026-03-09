@@ -133,6 +133,10 @@
         position: static;
       }
     }
+#shareWhatsapp{
+background:#25D366;
+color: white;
+}    
   </style>
 </head>
 <body>
@@ -147,8 +151,10 @@
       <div class="actions">
         <button class="btn-primary" id="previewBtn">معاينة</button>
         <button class="btn-secondary" id="downloadBtn">تحميل الصورة</button>
+        <button class="btn-secondary" id="shareWhatsapp">مشاركة واتساب</button>
+        <button class="btn-secondary" id="copyLink">نسخ الرابط</button>
       </div>
-
+      
       <div class="hint">
         تم استخدام نسخة محسّنة الدقة من البطاقة. يمكنك تعديل موضع الاسم أو حجمه بسهولة من داخل الكود عند الحاجة.
       </div>
@@ -230,6 +236,33 @@
   document.getElementById('nameInput').addEventListener('keydown', (e) => {
     if (e.key === 'Enter') drawCard();
   });
+
+  // مشاركة واتساب
+document.getElementById("shareWhatsapp").addEventListener("click", function () {
+
+  const pageUrl = window.location.href;
+
+  const text = encodeURIComponent(
+"اصنع بطاقة تهنئة بالاسم لزوار الروضة الشريفة 🌙\n\nجربها من هنا:\n" + pageUrl
+  );
+
+  const whatsappUrl = "https://wa.me/?text=" + text;
+
+  window.open(whatsappUrl, "_blank");
+});
+
+
+// نسخ الرابط
+document.getElementById("copyLink").addEventListener("click", function () {
+
+  const pageUrl = window.location.href;
+
+  navigator.clipboard.writeText(pageUrl).then(() => {
+    alert("تم نسخ رابط الصفحة");
+  });
+
+});
+  
 </script>
 </body>
 </html>
