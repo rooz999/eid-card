@@ -201,7 +201,7 @@ const nameBox = {
     ctx.drawImage(img, 0, 0);
 
     if (name) {
-      const maxTextWidth = nameBox.width - 120;
+      const maxTextWidth = nameBox.width - 140;
       const fontSize = fitText(ctx, name, maxTextWidth, 68, 20);
       ctx.font = `700 ${fontSize}px Tajawal`;
       ctx.fillStyle = '#7a4b33';
@@ -213,7 +213,7 @@ const nameBox = {
 
       ctx.fillText(
         name,
-        nameBox.x + nameBox.width / 2 - 30,
+        nameBox.x + nameBox.width / 2 - 15,
         nameBox.y + nameBox.height / 2 + 12
       );
 
